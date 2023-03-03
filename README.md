@@ -7,7 +7,7 @@ This project was a tentative solution for Proconty's Challenge, which has as the
 * New DB: MySQL
 
 ## How to run it
-1. Go to [this website] (https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud?resource=download), download the file, and unzip it.
+1. Go to [this website](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud?resource=download), download the file, and unzip it.
 2. Clon this repo
 3. Move the first step file to the repo's folder.
 4. You need to get PostgreSQL and MySQL, if you haven't installed them, I recommend laragon, you can follow [this tutorial](https://www.kreaweb.be/laragon-add-postgresql/)
