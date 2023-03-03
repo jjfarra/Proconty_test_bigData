@@ -1,5 +1,5 @@
-import pandas as pd
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, Text, ForeignKey
+<<<<<<< HEAD
+from sqlalchemy import create_engine, Column, Integer, Select, text
 from sqlalchemy.engine import URL
 from sqlalchemy.orm import declarative_base, sessionmaker
 
@@ -14,9 +14,27 @@ url = URL.create(
 engine = create_engine(url)
 connection = engine.connect()
 
-Base = declarative_base()
 
-class Creditcard(Base):
+Session = sessionmaker(bind=engine)
+session = Session()
+
+
+data = list(session.execute(text("""SELECT * FROM creditcard;""")))
+
+session.close()
+#creating an engine
+url2 = URL.create(
+    drivername= "mysql+pymysql",
+    username= "root",
+    host= "localhost",
+    database= "creditcard_data"
+)
+engine2 = create_engine(url2)
+
+connection2 = engine2.connect()
+
+Base2 = declarative_base()
+class Creditcard(Base2):
     __tablename__ = 'creditcard'
 
     id = Column(Integer(), primary_key=True)
@@ -49,29 +67,22 @@ class Creditcard(Base):
     # v27 = Column(Integer())
     # v28 = Column(Integer())
     # amount = Column(Integer())
+Base2.metadata.create_all(engine2)
 
-
-
-Base.metadata.create_all(engine)
-
-Session = sessionmaker(bind=engine)
-session = Session()
-#loading data as dataframe in pandas
-data = pd.read_csv('creditcard.csv', lineterminator='\n')
+Session2 = sessionmaker(bind=engine2)
+session2 = Session2()
 rows_list = []
-
-for idx,row in data.iterrows():
+for row in data:
     info = Creditcard(
-        time=row['Time'],
-        v1=row['V1'],
-        v2=row['V2'],
-        v3=row['V3'],
+        time=row[1],
+        v1=row[2],
+        v2=row[3],
+        v3=row[4],
     )
     rows_list.append(info)
-print(len(rows_list))
 
-for idx in range(0,len(rows_list),5000):
-    session.add_all(rows_list[idx:idx+5000])
-    session.commit()
+for idx in range(0,len(rows_list), 5000):
+     session2.add_all(rows_list[idx:idx+5000])
+     session2.commit()
 
-print('Data loaded...')
+print('Data transferred...')
